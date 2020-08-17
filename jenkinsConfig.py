@@ -1,6 +1,13 @@
 import jenkins
 import sys
 import socket
+import netifaces as ni
+ni.ifaddresses('eth0')
+ip = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
+print("adress one")
+print(ip)  # should print "192.168.100.37"
+
+
 
 #arguments: 1->Loginname 2->password 3->Jobname 4->repoadress
 
