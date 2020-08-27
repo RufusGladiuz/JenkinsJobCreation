@@ -16,11 +16,6 @@ resource "digitalocean_droplet" "web1" {
     agent = false
   }
 
-  provisioner "file" {
-    source      = "./default"
-    destination = "./default"
-  }
-
    provisioner "file" {
     source      = "./jenkins"
     destination = "./jenkins"
@@ -143,21 +138,21 @@ provisioner "remote-exec" {
 
     inline =[
       //Install webserver
-      "sudo apt-get update"
+      "sudo apt-get update",
       "sudo apt install php-fpm -y",
       "sudo apt-get update",
       "sudo apt install nginx -y",
       "rm -r  /etc/default/jenkins",
       "cp jenkins /etc/default/",
       "rm -r /etc/nginx/sites-available/default",
-      "cp default /etc/nginx/sites-available/",
-      "python nginxutils.py ${digitalocean_droplet.web1.ipv4_address}"
-      "sudo service nginx restart",
-
-      "php -f kas_auth.php ${digitalocean_droplet.web1.ipv4_address} var.domain_name var.kas_username var.kas_password"
-
       "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
       "cd TODO_InfrastructureAsCode/",
+      "python nginxutils.py ${digitalocean_droplet.web1.ipv4_address}",
+      "cd ..",
+      "cp /TODO_InfrastructureAsCode/terraform/default /etc/nginx/sites-available/",
+      "sudo service nginx restart",
+      "php -f kas_auth.php ${digitalocean_droplet.web1.ipv4_address} var.domain_name var.kas_username var.kas_password",
+
       "php -f kas_auth.php",
       "cd ..",
       "rm -R TODO_InfrastructureAsCode",
