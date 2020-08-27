@@ -55,7 +55,8 @@ provisioner "remote-exec" {
         "sudo apt-get install python3-pip -y",
         "sudo python3 -m pip install python-jenkins",
         "sudo python3 -m pip install PyGithub",
-
+        "sudo python3 -m pip install kasserver",
+        
         //Install Docker
         "sudo apt-get update",
         "sudo apt install apt-transport-https ca-certificates curl software-properties-common -y",
