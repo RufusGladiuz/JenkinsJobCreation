@@ -129,12 +129,12 @@ provisioner "remote-exec" {
 
     inline =[
         //Setup Jenkins Job
-        "sudo git clone https://github.com/RufusGladiuz/JenkinsJobCreation.git",
-        "cd JenkinsJobCreation/",
+        "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
+        "cd TODO_InfrastructureAsCode/",
         "sudo python3 jenkinsConfig.py devops admin123 Todo-App ${var.githubRepo}",
         "sudo python3 webhookAutomation.py ${var.githubRepo} ${var.githubAccessToken}",
         "cd ..",
-        "rm -R JenkinsJobCreation",
+        "rm -R TODO_InfrastructureAsCode",
     ]
 }
 
@@ -142,6 +142,8 @@ provisioner "remote-exec" {
 
     inline =[
       //Install webserver
+      "sudo apt-get update"
+      "sudo apt install php-fpm -y",
       "sudo apt-get update",
       "sudo apt install nginx -y",
       "rm -r  /etc/default/jenkins",
@@ -149,6 +151,14 @@ provisioner "remote-exec" {
       "rm -r /etc/nginx/sites-available/default",
       "cp default /etc/nginx/sites-available/",
       "sudo service nginx restart",
+
+      "php -f kas_auth.php ${digitalocean_droplet.web1.ipv4_address} var.domain_name"
+
+      "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
+      "cd TODO_InfrastructureAsCode/",
+      "php -f kas_auth.php",
+      "cd ..",
+      "rm -R TODO_InfrastructureAsCode",
 
         //HTTPS
         "sudo apt update",
