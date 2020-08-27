@@ -1,9 +1,9 @@
 <?php
 
 $Params=array(
-	'kas_login' => '662513',          // das KAS-Login
+	'kas_login' => $argv[3],          // das KAS-Login
 	'kas_auth_type' => 'sha1',
-	'kas_auth_data' => sha1('Yallagang91'),// das KAS-Passwort
+	'kas_auth_data' => sha1($argv[4]),// das KAS-Passwort
     'kas_action' => 'add_dns_settings',
     'record_name' => 'test'
     'record_type' => 'A',

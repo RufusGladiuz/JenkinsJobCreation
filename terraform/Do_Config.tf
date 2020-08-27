@@ -151,9 +151,10 @@ provisioner "remote-exec" {
       "cp jenkins /etc/default/",
       "rm -r /etc/nginx/sites-available/default",
       "cp default /etc/nginx/sites-available/",
+      "python nginxutils.py ${digitalocean_droplet.web1.ipv4_address}"
       "sudo service nginx restart",
 
-      "php -f kas_auth.php ${digitalocean_droplet.web1.ipv4_address} var.domain_name"
+      "php -f kas_auth.php ${digitalocean_droplet.web1.ipv4_address} var.domain_name var.kas_username var.kas_password"
 
       "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
       "cd TODO_InfrastructureAsCode/",
