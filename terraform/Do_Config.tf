@@ -150,6 +150,7 @@ provisioner "remote-exec" {
       "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
       "cd TODO_InfrastructureAsCode/",
       "python nginxutils.py ${var.domain_name}",
+      //Go back to the root
       "cd",
       "cp /TODO_InfrastructureAsCode/terraform/default /etc/nginx/sites-available/",
       "sudo service nginx restart",
