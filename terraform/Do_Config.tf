@@ -143,12 +143,16 @@ provisioner "remote-exec" {
       "rm -r /etc/nginx/sites-available/default",
 
       // UNTESTED TODO: DOMAIN NAME IN DEFAULT ERSETZEN + IPS IN KAS eintragen
+      "echo start fetching infrastructure as code",
       "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
       "cd TODO_InfrastructureAsCode/",
       //Go back to the root
+      "echo go back to root",
       "cd",
+      "echo move default to sitesavailable",
       "cp /TODO_InfrastructureAsCode/terraform/default /etc/nginx/sites-available/",
       "python nginxutils.py ${var.domain_name}",
+      "echo moved default to sitesavailable successfull",
       "sudo service nginx restart",
       "php -f kas_auth.php ${digitalocean_droplet.web1.ipv4_address} ${var.domain_name} ${var.kas_username} ${var.kas_password}",
 
