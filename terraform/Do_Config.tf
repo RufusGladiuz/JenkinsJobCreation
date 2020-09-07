@@ -141,14 +141,14 @@ provisioner "remote-exec" {
       "rm -r  /etc/default/jenkins",
       "cp jenkins /etc/default/",
       "rm -r /etc/nginx/sites-available/default",
-      "cp default /etc/nginx/sites-available/",
+
       // UNTESTED TODO: DOMAIN NAME IN DEFAULT ERSETZEN + IPS IN KAS eintragen
       "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
       "cd TODO_InfrastructureAsCode/",
-      "python nginxutils.py ${var.domain_name}",
       //Go back to the root
       "cd",
       "cp /TODO_InfrastructureAsCode/terraform/default /etc/nginx/sites-available/",
+      "python nginxutils.py ${var.domain_name}",
       "sudo service nginx restart",
       "php -f kas_auth.php ${digitalocean_droplet.web1.ipv4_address} ${var.domain_name} ${var.kas_username} ${var.kas_password}",
 
