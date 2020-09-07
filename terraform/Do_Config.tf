@@ -25,9 +25,6 @@ provisioner "remote-exec" {
 
     inline =[
 
-
-      "sudo sleep 5",
-
       //Install basics
         "sudo apt-get update",
         "sudo apt install npm -y",
@@ -74,10 +71,9 @@ provisioner "remote-exec" {
 
         //Wait for Jenkins to initilise
         "sudo sleep 30",
-        "sudo ufw allow 8080",
 
         //Get Jenkis JDK
-        "sudo wget http://${digitalocean_droplet.web1.ipv4_address}:8080/jnlpJars/jenkins-cli.jar",
+        "sudo wget http://`ip route get 1.2.3.4 | awk '{print $7}'`:8080/jnlpJars/jenkins-cli.jar",
 
         //Create jenkins user
         "sudo echo 'jenkins.model.Jenkins.instance.securityRealm.createAccount(\"devops\", \"admin123\")' | java -jar jenkins-cli.jar -auth admin:`cat /var/lib/jenkins/secrets/initialAdminPassword` -s http://localhost:8080/ groovy =",
@@ -106,7 +102,7 @@ provisioner "remote-exec" {
         "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code",
         //"sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code-support",
 
-
+        "sudo ufw allow 8080",
         // Give jenkis rights to use docker
         "sudo usermod -aG docker jenkins",
         "sudo systemctl restart jenkins",
@@ -115,7 +111,7 @@ provisioner "remote-exec" {
         //Monitoring
         "sudo apt-get install monit -y",
         "monit",
-        "echo 'set httpd port 2812 \n use address' ${digitalocean_droplet.web1.ipv4_address} '\n allow 0.0.0.0/0.0.0.0 \n allow admin:monit' >> /etc/monit/monitrc",
+        "echo 'set httpd port 2812 \n use address' `ip route get 1.2.3.4 | awk '{print $7}'` '\n allow 0.0.0.0/0.0.0.0 \n allow admin:monit' >> /etc/monit/monitrc",
         "monit reload",
 
     ]
