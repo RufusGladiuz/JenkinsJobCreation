@@ -137,6 +137,8 @@ provisioner "remote-exec" {
       "sudo apt-get update",
       "sudo apt install php-fpm -y",
       "sudo apt-get update",
+      "sudo apt-get install  php7.2-soap",
+      "sudo apt-get update",
       "sudo apt install nginx -y",
       "rm -r  /etc/default/jenkins",
       "cp jenkins /etc/default/",
@@ -154,11 +156,9 @@ provisioner "remote-exec" {
       "python nginxutils.py ${var.domain_name}",
       "echo moved default to sitesavailable successfull",
       "sudo service nginx restart",
-      "php -f kas_auth.php ${digitalocean_droplet.web1.ipv4_address} ${var.domain_name} ${var.kas_username} ${var.kas_password}",
-
-      "php -f kas_auth.php",
-      // BIS HIER
-      "cd ..",
+      "cd TODO_InfrastructureAsCode/",
+      "php -f kas_auth.php ${digitalocean_droplet.web1.ipv4_address} ${var.domain_name} ${var.kas_password}",
+      "cd",
       "rm -R TODO_InfrastructureAsCode",
 
         //HTTPS
