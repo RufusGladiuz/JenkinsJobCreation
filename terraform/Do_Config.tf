@@ -150,7 +150,7 @@ provisioner "remote-exec" {
       "echo go back to root",
       "cd",
       "echo move default to sitesavailable",
-      "cp /TODO_InfrastructureAsCode/terraform/default /etc/nginx/sites-available/",
+      "cp TODO_InfrastructureAsCode/terraform/default /etc/nginx/sites-available/",
       "python nginxutils.py ${var.domain_name}",
       "echo moved default to sitesavailable successfull",
       "sudo service nginx restart",
