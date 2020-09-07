@@ -145,6 +145,7 @@ provisioner "remote-exec" {
       "rm -r  /etc/default/jenkins",
       "cp jenkins /etc/default/",
       "rm -r /etc/nginx/sites-available/default",
+      // UNTESTED TODO: DOMAIN NAME IN DEFAULT ERSETZEN + IPS IN KAS eintragen
       "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
       "cd TODO_InfrastructureAsCode/",
       "python nginxutils.py ${var.domain_name}",
@@ -154,6 +155,7 @@ provisioner "remote-exec" {
       "php -f kas_auth.php ${digitalocean_droplet.web1.ipv4_address} ${var.domain_name} ${var.kas_username} ${var.kas_password}",
 
       "php -f kas_auth.php",
+      // BIS HIER
       "cd ..",
       "rm -R TODO_InfrastructureAsCode",
 
@@ -162,7 +164,7 @@ provisioner "remote-exec" {
         "sudo apt install snapd -y",
         "sudo snap install --classic certbot",
         //source: https://hodovi.ch/blog/securing-a-site-with-letsencrypt-aws-and-terraform/
-        "sudo certbot --nginx --email onur-ozkan@hotmail.de --agree-tos -d 'rouven-onur.tk' -n",
+        "sudo certbot --nginx --email onur-ozkan@hotmail.de --agree-tos -d ${var.domain_name} -n",
     ]
 }
 
