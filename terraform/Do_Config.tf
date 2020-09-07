@@ -145,6 +145,7 @@ provisioner "remote-exec" {
       "rm -r  /etc/default/jenkins",
       "cp jenkins /etc/default/",
       "rm -r /etc/nginx/sites-available/default",
+      "cp default /etc/nginx/sites-available/",
       // UNTESTED TODO: DOMAIN NAME IN DEFAULT ERSETZEN + IPS IN KAS eintragen
       "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
       "cd TODO_InfrastructureAsCode/",
