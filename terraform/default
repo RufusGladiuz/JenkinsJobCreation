@@ -8,6 +8,11 @@ server {
         proxy_pass http://127.0.0.1:3000;
     }
 
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+    }
+
     location ^~ /jenkins/ {
         proxy_pass http://127.0.0.1:8080/jenkins/;
         sendfile off;
