@@ -124,6 +124,21 @@ provisioner "remote-exec" {
     ]
 }
 
+// Setup Monitoring
+provisioner "remote-exec" {
+
+    inline =[
+      "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
+      "sudo apt-get install monit -y",
+      "monit",
+      "cd TODO_InfrastructureAsCode",
+      "python monitsetup.py ${var.domain_name}"
+      "rm -R /etc/monit/monitrc",
+      "cp TODO_InfrastructureAsCode/monitrc etc/monit",
+      "monit reload",
+    ]
+}
+
 provisioner "remote-exec" {
 
     inline =[
@@ -165,19 +180,6 @@ provisioner "remote-exec" {
     ]
 }
 
-
-// Setup Monitoring
-provisioner "remote-exec" {
-
-    inline =[
-      "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
-      "sudo apt-get install monit -y",
-      "monit",
-      "echo 'set httpd port 2812 \n use address' `ip route get 1.2.3.4 | awk '{print $7}'` '\n allow 0.0.0.0/0.0.0.0 \n allow admin:monit' >> /etc/monit/monitrc",
-      "monit reload",
-    ]
-  }
-
 // Run App
 provisioner "remote-exec" {
 
@@ -190,9 +192,7 @@ provisioner "remote-exec" {
         "sudo docker-compose up -d",
         "cd ",
         "rm -R lecture-devops-app",
-    ]
-    
-    
+    ] 
 }
 
 

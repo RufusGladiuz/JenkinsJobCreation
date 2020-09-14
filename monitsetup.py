@@ -11,4 +11,3 @@ configAsString = config.read()
 
 configAsString = configAsString.replace("#serverIP", ip)
 configAsString = configAsString.replace("#serverIP", sys.argv[1])
-
