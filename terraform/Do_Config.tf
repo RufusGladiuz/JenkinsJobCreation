@@ -48,7 +48,7 @@ provisioner "remote-exec" {
         "sudo python3 -m pip install python-jenkins",
         "sudo python3 -m pip install PyGithub",
         "sudo python3 -m pip install kasserver",
-        
+        "sudo python3 -m pip install netifaces",
         //Install Docker
         "sudo apt-get update",
         "sudo apt install apt-transport-https ca-certificates curl software-properties-common -y",
@@ -108,25 +108,38 @@ provisioner "remote-exec" {
         "sudo systemctl restart jenkins",
         "sudo sleep 30",
 
-        //Monitoring
-        "sudo apt-get install monit -y",
-        "monit",
-        "echo 'set httpd port 2812 \n use address' `ip route get 1.2.3.4 | awk '{print $7}'` '\n allow 0.0.0.0/0.0.0.0 \n allow admin:monit' >> /etc/monit/monitrc",
-        "monit reload",
-
     ]
 }
 
+//Setup Jenkins Job
 provisioner "remote-exec" {
 
     inline =[
-        //Setup Jenkins Job
+
         "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
         "cd TODO_InfrastructureAsCode/",
         "sudo python3 jenkinsConfig.py devops admin123 Todo-App ${var.githubRepo}",
         "sudo python3 webhookAutomation.py ${var.githubRepo} ${var.githubAccessToken}",
         "cd ..",
         "rm -R TODO_InfrastructureAsCode",
+    ]
+}
+
+// Setup Monitoring
+provisioner "remote-exec" {
+
+    inline =[
+      "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
+      "sudo apt-get install monit -y",
+      "monit",
+      "cd TODO_InfrastructureAsCode/",
+      "python3 monitsetup.py ${var.domain_name}",
+      "rm -R /etc/monit/monitrc",
+      "cp monitrc /etc/monit/",
+      "chmod 0700 /etc/monit/monitrc",
+      "monit reload",
+      "cd ",
+      "rm -R TODO_InfrastructureAsCode",
     ]
 }
 
@@ -148,6 +161,7 @@ provisioner "remote-exec" {
       "echo start fetching infrastructure as code",
       "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
       "cd TODO_InfrastructureAsCode/",
+
       //Go back to the root
       "echo go back to root",
       "cd",
@@ -160,6 +174,7 @@ provisioner "remote-exec" {
       "php -f kas_auth.php ${digitalocean_droplet.web1.ipv4_address} ${var.domain_name} ${var.kas_password}",
       "cd",
       "rm -R TODO_InfrastructureAsCode",
+
       "sudo sleep 23",
 
       //HTTPS
@@ -171,5 +186,22 @@ provisioner "remote-exec" {
     ]
 }
 
+// Run App
+provisioner "remote-exec" {
+
+    inline =[
+        "sudo git clone ${var.githubRepo}",
+        "cd lecture-devops-app",
+        "sudo docker build -t todo .",
+        "sudo docker image prune -f",
+        "sudo docker-compose build",
+        "sudo docker-compose up -d",
+        "cd ",
+        "rm -R lecture-devops-app",
+    ] 
+}
+
+
+                
 
 }
