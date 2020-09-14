@@ -22,6 +22,11 @@ variable "domain_name"{
   default = "Domain name"
 }
 
+variable "kas_username"{
+  type = "string"
+  default = "Password for Kas login"
+}
+
 variable "kas_password"{
   type = "string"
   default = "Password for Kas login"
