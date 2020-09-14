@@ -163,7 +163,7 @@ provisioner "remote-exec" {
       "python nginxutils.py ${var.domain_name}",
       "echo moved default to sitesavailable successfull",
       "sudo service nginx restart",
-      "php -f kas_auth.php ${kas_username} ${var.kas_password} ${var.domain_name} ${digitalocean_droplet.web1.ipv4_address}",
+      "php -f kas_auth.php ${var.kas_username} ${var.kas_password} ${var.domain_name} ${digitalocean_droplet.web1.ipv4_address}",
       "cd",
       "rm -R TODO_InfrastructureAsCode",
 
