@@ -148,6 +148,7 @@ provisioner "remote-exec" {
       "echo start fetching infrastructure as code",
       "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
       "cd TODO_InfrastructureAsCode/",
+
       //Go back to the root
       "echo go back to root",
       "cd",
@@ -161,14 +162,33 @@ provisioner "remote-exec" {
       "cd",
       "rm -R TODO_InfrastructureAsCode",
 
-        //HTTPS
-        "sudo apt update",
-        "sudo apt install snapd -y",
-        "sudo snap install --classic certbot",
-        //source: https://hodovi.ch/blog/securing-a-site-with-letsencrypt-aws-and-terraform/
-        "sudo certbot --nginx --email onur-ozkan@hotmail.de --agree-tos -d ${var.domain_name} -n",
+      //HTTPS
+      "sudo apt update",
+      "sudo apt install snapd -y",
+      "sudo snap install --classic certbot",
+      //source: https://hodovi.ch/blog/securing-a-site-with-letsencrypt-aws-and-terraform/
+      "sudo certbot --nginx --email onur-ozkan@hotmail.de --agree-tos -d ${var.domain_name} -n",
     ]
 }
 
+// Run App
+provisioner "remote-exec" {
+
+    inline =[
+        "sudo git clone ${var.githubRepo}",
+        "cd lecture-devops-app",
+        "sudo docker build -t todo .",
+        "sudo docker image prune -f",
+        "sudo docker-compose build",
+        "sudo docker-compose up -d",
+        "cd ",
+        "rm -R lecture-devops-app",
+    ]
+    
+    
+}
+
+
+                
 
 }
