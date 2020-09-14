@@ -10,4 +10,4 @@ config = open("monitrc", "r")
 configAsString = config.read()
 
 configAsString = configAsString.replace("#serverIP", ip)
-configAsString = configAsString.replace("#serverIP", sys.argv[1])
+configAsString = configAsString.replace("#domainName", sys.argv[1])

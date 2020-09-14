@@ -48,7 +48,7 @@ provisioner "remote-exec" {
         "sudo python3 -m pip install python-jenkins",
         "sudo python3 -m pip install PyGithub",
         "sudo python3 -m pip install kasserver",
-        
+        "sudo python3 -m pip install netifaces",
         //Install Docker
         "sudo apt-get update",
         "sudo apt install apt-transport-https ca-certificates curl software-properties-common -y",
@@ -111,10 +111,11 @@ provisioner "remote-exec" {
     ]
 }
 
+//Setup Jenkins Job
 provisioner "remote-exec" {
 
     inline =[
-        //Setup Jenkins Job
+
         "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
         "cd TODO_InfrastructureAsCode/",
         "sudo python3 jenkinsConfig.py devops admin123 Todo-App ${var.githubRepo}",
@@ -131,11 +132,14 @@ provisioner "remote-exec" {
       "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
       "sudo apt-get install monit -y",
       "monit",
-      "cd TODO_InfrastructureAsCode",
-      "python monitsetup.py ${var.domain_name}",
+      "cd TODO_InfrastructureAsCode/",
+      "python3 monitsetup.py ${var.domain_name}",
       "rm -R /etc/monit/monitrc",
-      "cp TODO_InfrastructureAsCode/monitrc etc/monit",
+      "cp monitrc /etc/monit/",
+      "chmod 0700 /etc/monit/monitrc",
       "monit reload",
+      "cd ",
+      "rm -R TODO_InfrastructureAsCode",
     ]
 }
 
