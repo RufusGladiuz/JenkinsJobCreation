@@ -159,7 +159,7 @@ provisioner "remote-exec" {
 
       "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
       "cd TODO_InfrastructureAsCode/",
-      "cp /terraform/default /etc/nginx/sites-available/",
+      "cp terraform/default /etc/nginx/sites-available/",
       "python nginxutils.py ${var.domain_name}",
       "echo moved default to sitesavailable successfull",
       "sudo service nginx restart",
@@ -186,6 +186,7 @@ provisioner "remote-exec" {
         "cd lecture-devops-app",
         "sudo docker build -t todo .",
         "sudo docker image prune -f",
+        "cd app",
         "sudo docker-compose build",
         "sudo docker-compose up -d",
         "cd ",
