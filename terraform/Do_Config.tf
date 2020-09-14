@@ -160,13 +160,14 @@ provisioner "remote-exec" {
       "php -f kas_auth.php ${digitalocean_droplet.web1.ipv4_address} ${var.domain_name} ${var.kas_password}",
       "cd",
       "rm -R TODO_InfrastructureAsCode",
+      "sudo sleep 23",
 
-        //HTTPS
-        "sudo apt update",
-        "sudo apt install snapd -y",
-        "sudo snap install --classic certbot",
-        //source: https://hodovi.ch/blog/securing-a-site-with-letsencrypt-aws-and-terraform/
-        "sudo certbot --nginx --email onur-ozkan@hotmail.de --agree-tos -d ${var.domain_name} -n",
+      //HTTPS
+      "sudo apt update",
+      "sudo apt install snapd -y",
+      "sudo snap install --classic certbot",
+      //source: https://hodovi.ch/blog/securing-a-site-with-letsencrypt-aws-and-terraform/
+      "sudo certbot --nginx --email onur-ozkan@hotmail.de --agree-tos -d ${var.domain_name} -n",
     ]
 }
 
