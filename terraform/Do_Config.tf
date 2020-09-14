@@ -159,8 +159,8 @@ provisioner "remote-exec" {
 
       "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
       "cd TODO_InfrastructureAsCode/",
-      "cp terraform/default /etc/nginx/sites-available/",
       "python nginxutils.py ${var.domain_name}",
+      "cp terraform/default /etc/nginx/sites-available/",
       "echo moved default to sitesavailable successfull",
       "sudo service nginx restart",
       "php -f kas_auth.php ${var.kas_username} ${var.kas_password} ${var.domain_name} ${digitalocean_droplet.web1.ipv4_address}",
