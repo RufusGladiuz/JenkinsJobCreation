@@ -186,6 +186,7 @@ provisioner "remote-exec" {
         "cd lecture-devops-app",
         "sudo docker build -t todo .",
         "sudo docker image prune -f",
+        "cd app",
         "sudo docker-compose build",
         "sudo docker-compose up -d",
         "cd ",
