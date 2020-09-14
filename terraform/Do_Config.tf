@@ -108,12 +108,6 @@ provisioner "remote-exec" {
         "sudo systemctl restart jenkins",
         "sudo sleep 30",
 
-        //Monitoring
-        "sudo apt-get install monit -y",
-        "monit",
-        "echo 'set httpd port 2812 \n use address' `ip route get 1.2.3.4 | awk '{print $7}'` '\n allow 0.0.0.0/0.0.0.0 \n allow admin:monit' >> /etc/monit/monitrc",
-        "monit reload",
-
     ]
 }
 
@@ -170,6 +164,19 @@ provisioner "remote-exec" {
       "sudo certbot --nginx --email onur-ozkan@hotmail.de --agree-tos -d ${var.domain_name} -n",
     ]
 }
+
+
+// Setup Monitoring
+provisioner "remote-exec" {
+
+    inline =[
+      "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
+      "sudo apt-get install monit -y",
+      "monit",
+      "echo 'set httpd port 2812 \n use address' `ip route get 1.2.3.4 | awk '{print $7}'` '\n allow 0.0.0.0/0.0.0.0 \n allow admin:monit' >> /etc/monit/monitrc",
+      "monit reload",
+    ]
+  }
 
 // Run App
 provisioner "remote-exec" {

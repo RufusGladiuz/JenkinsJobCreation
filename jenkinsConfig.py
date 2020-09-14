@@ -7,11 +7,6 @@ import netifaces as ni
 
 ni.ifaddresses('eth0')
 ip = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
-print("adress one")
-print(ip)
-
-for value in sys.argv:
-    print(value)
 
 config = open("config.xml", "r")
 configAsString = config.read()
