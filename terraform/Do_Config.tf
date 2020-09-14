@@ -132,7 +132,7 @@ provisioner "remote-exec" {
       "sudo apt-get install monit -y",
       "monit",
       "cd TODO_InfrastructureAsCode",
-      "python monitsetup.py ${var.domain_name}"
+      "python monitsetup.py ${var.domain_name}",
       "rm -R /etc/monit/monitrc",
       "cp TODO_InfrastructureAsCode/monitrc etc/monit",
       "monit reload",
