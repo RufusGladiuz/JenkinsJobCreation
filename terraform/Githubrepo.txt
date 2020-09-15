@@ -1,1 +1,0 @@
-https://github.com/Oni22/lecture-devops-app.git

@@ -27,6 +27,11 @@ provisioner "remote-exec" {
 
       //Install basics
         "sudo apt-get update",
+        "sudo apt install php-fpm -y",
+        "sudo apt-get update",
+        "sudo apt-get install  php7.2-soap",
+        
+        "sudo apt-get update",
         "sudo apt install npm -y",
                
         "sudo curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh",
@@ -49,6 +54,7 @@ provisioner "remote-exec" {
         "sudo python3 -m pip install PyGithub",
         "sudo python3 -m pip install kasserver",
         "sudo python3 -m pip install netifaces",
+
         //Install Docker
         "sudo apt-get update",
         "sudo apt install apt-transport-https ca-certificates curl software-properties-common -y",
@@ -100,9 +106,8 @@ provisioner "remote-exec" {
         "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin email-ext",
         "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin mailer",
         "sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code",
-        //"sudo java -jar jenkins-cli.jar -auth devops:admin123 -s http://localhost:8080/ install-plugin configuration-as-code-support",
-
         "sudo ufw allow 8080",
+
         // Give jenkis rights to use docker
         "sudo usermod -aG docker jenkins",
         "sudo systemctl restart jenkins",
@@ -117,10 +122,14 @@ provisioner "remote-exec" {
     inline =[
 
         "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
-        "cd TODO_InfrastructureAsCode/",
+        "cd TODO_InfrastructureAsCode/jenkins",
+        
+        // Configure jenkins settings
         "sudo python3 jenkinsConfig.py devops admin123 Todo-App ${var.githubRepo}",
+
+        // Set Github webhook
         "sudo python3 webhookAutomation.py ${var.githubRepo} ${var.githubAccessToken}",
-        "cd ..",
+        "cd ",
         "rm -R TODO_InfrastructureAsCode",
     ]
 }
@@ -132,25 +141,25 @@ provisioner "remote-exec" {
       "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
       "sudo apt-get install monit -y",
       "monit",
-      "cd TODO_InfrastructureAsCode/",
+
+      // Configure Monit
+      "cd TODO_InfrastructureAsCode/monit",
       "python3 monitsetup.py ${var.domain_name}",
       "rm -R /etc/monit/monitrc",
       "cp monitrc /etc/monit/",
       "chmod 0700 /etc/monit/monitrc",
+
       "monit reload",
       "cd ",
       "rm -R TODO_InfrastructureAsCode",
     ]
 }
 
+//Install webserver
 provisioner "remote-exec" {
 
     inline =[
-      //Install webserver
-      "sudo apt-get update",
-      "sudo apt install php-fpm -y",
-      "sudo apt-get update",
-      "sudo apt-get install  php7.2-soap",
+
       "sudo apt-get update",
       "sudo apt install nginx -y",
       "rm -r  /etc/default/jenkins",
@@ -158,15 +167,16 @@ provisioner "remote-exec" {
       "rm -r /etc/nginx/sites-available/default",
 
       "sudo git clone https://github.com/RufusGladiuz/TODO_InfrastructureAsCode.git",
-      "cd TODO_InfrastructureAsCode/",
+      "cd TODO_InfrastructureAsCode/nginx",
       "python nginxutils.py ${var.domain_name}",
-      "cp terraform/default /etc/nginx/sites-available/",
-      "echo moved default to sitesavailable successfull",
+      "cp default /etc/nginx/sites-available/",
       "sudo service nginx restart",
+      "cd ..",
       "php -f kas_auth.php ${var.kas_username} ${var.kas_password} ${var.domain_name} ${digitalocean_droplet.web1.ipv4_address}",
-      "cd",
+      "cd ",
       "rm -R TODO_InfrastructureAsCode",
 
+      // Wait for domain to be ready
       "sudo sleep 23",
 
       //HTTPS
